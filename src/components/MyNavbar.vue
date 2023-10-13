@@ -13,19 +13,26 @@
     </div>
 
     <div class="icons">
+      <store-list />
       <router-link to="/basket" class="icon"
         ><img src="../assets/images/basket.png" alt=""
       /></router-link>
 
       <router-link to="/account" class="icon"
-        ><img src="../assets/images/account.png" alt=""
+        ><img style="width: 25px" src="../assets/images/account.png" alt=""
       /></router-link>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import StoreList from "@/components/StoreList.vue";
+
+export default {
+  components: {
+    StoreList,
+  },
+};
 </script>
 
 <style scoped>
@@ -59,11 +66,18 @@ export default {};
 .icons {
   display: flex;
   align-items: center;
+  margin-right: 0;
+}
+
+.icon {
+  margin-left: 30px;
 }
 .icon img {
   width: 30px;
-  margin-left: 30px;
   cursor: pointer;
+}
+
+.store__list {
 }
 </style>
 ;
