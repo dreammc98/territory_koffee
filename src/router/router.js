@@ -5,7 +5,7 @@ import ReviewPage from "@/pages/ReviewPage";
 import StoriesPage from "@/pages/StoriesPage";
 import SupportPage from "@/pages/SupportPage";
 import AccountPage from "@/pages/AccountPage";
-import BasketPage from "@/pages/BasketPage";
+import ProductPage from "@/pages/ProductPage";
 
 const routes = [
   {
@@ -33,8 +33,8 @@ const routes = [
     component: AccountPage,
   },
   {
-    path: "/basket",
-    component: BasketPage,
+    path: "/product/:id",
+    component: ProductPage,
   },
 ];
 

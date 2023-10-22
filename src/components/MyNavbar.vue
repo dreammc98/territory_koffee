@@ -14,9 +14,9 @@
 
     <div class="icons">
       <store-list />
-      <router-link to="/basket" class="icon"
-        ><img src="../assets/images/basket.png" alt=""
-      /></router-link>
+
+      <div @click="switchBasket" class="icon"><img src="../assets/images/basket.png" alt="" /></div>
+      <list-basket v-if="testOpen" v-click-outside="switchBasket" class="position-list__basket" />
 
       <router-link to="/account" class="icon"
         ><img style="width: 25px" src="../assets/images/account.png" alt=""
@@ -27,10 +27,24 @@
 
 <script>
 import StoreList from "@/components/StoreList.vue";
+import ListBasket from "@/components/ListBasket.vue";
 
 export default {
+  data() {
+    return {
+      testOpen: false,
+    };
+  },
+
+  methods: {
+    switchBasket() {
+      this.testOpen ? (this.testOpen = false) : (this.testOpen = true);
+    },
+  },
+
   components: {
     StoreList,
+    ListBasket,
   },
 };
 </script>
@@ -77,7 +91,10 @@ export default {
   cursor: pointer;
 }
 
-.store__list {
+.position-list__basket {
+  position: absolute;
+  right: 60px;
+  top: 55px;
 }
 </style>
 ;

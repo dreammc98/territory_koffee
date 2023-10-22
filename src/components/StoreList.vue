@@ -10,7 +10,7 @@
         <div
           v-for="itemStore in stores"
           :key="itemStore.id"
-          @click="getProductsList"
+          @click="getProductsList(itemStore.store_name)"
           class="store__items"
         >
           <div class="store__item store__item-left">
@@ -44,8 +44,10 @@ export default {
     ...mapMutations({
       openStoreList: "stores/openStoreList",
       closeStoreList: "stores/closeStoreList",
+      setStore: "stores/setStore",
     }),
-    getProductsList() {
+    getProductsList(store) {
+      this.setStore(store);
       this.closeStoreList();
     },
   },
@@ -95,6 +97,7 @@ export default {
   z-index: 2;
   background: #f8dfa0;
   border-radius: 5px;
+  opacity: 1;
 }
 
 .store__list h2 {

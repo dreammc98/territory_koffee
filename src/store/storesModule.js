@@ -29,7 +29,6 @@ export const storesModule = {
         );
         commit("setStores", response.data.stores);
         commit("setStore", state.stores[0].store_name);
-        console.log("response.data = ", response.data.stores);
       } catch (e) {
         console.log(e);
       }
