@@ -24,8 +24,15 @@ export default {
   box-sizing: border-box;
 }
 
+body {
+  padding: 0 calc(20px - (100vw - 100%)) 0 0;
+}
+
 .app {
   max-width: 1280px;
   margin: 0 auto;
+}
+body {
+  padding: 0 calc(20px - (100vw - 100%)) 0 0;
 }
 </style>

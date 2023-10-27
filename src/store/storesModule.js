@@ -5,6 +5,7 @@ export const storesModule = {
     store: "",
     stores: "",
     storesLoading: false,
+    fuse: true,
   }),
   getters: {},
   mutations: {
@@ -14,11 +15,14 @@ export const storesModule = {
     setStores(state, stores) {
       state.stores = stores;
     },
-    openStoreList(state) {
-      state.storesLoading = true;
+    storeListStateChange(state) {
+      state.storesLoading ? (state.storesLoading = false) : (state.storesLoading = true);
+      state.storesLoading
+        ? (document.body.style.overflow = "hidden")
+        : (document.body.style.overflow = "visible");
     },
-    closeStoreList(state) {
-      state.storesLoading = false;
+    setFuse(state, fuse) {
+      state.fuse = fuse;
     },
   },
   actions: {
@@ -28,7 +32,10 @@ export const storesModule = {
           "https://tk.uat.sibcode.team/public/api/catalog/getStores"
         );
         commit("setStores", response.data.stores);
-        commit("setStore", state.stores[0].store_name);
+        if (state.fuse) {
+          commit("setStore", state.stores[0].store_name);
+          commit("setFuse", false);
+        }
       } catch (e) {
         console.log(e);
       }

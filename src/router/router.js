@@ -4,12 +4,11 @@ import PromotionsPage from "@/pages/PromotionsPage";
 import ReviewPage from "@/pages/ReviewPage";
 import StoriesPage from "@/pages/StoriesPage";
 import SupportPage from "@/pages/SupportPage";
-import AccountPage from "@/pages/AccountPage";
 import ProductPage from "@/pages/ProductPage";
 
 const routes = [
   {
-    path: "/",
+    path: "/catalog",
     component: CatalogPage,
   },
   {
@@ -29,11 +28,7 @@ const routes = [
     component: SupportPage,
   },
   {
-    path: "/account",
-    component: AccountPage,
-  },
-  {
-    path: "/product/:id",
+    path: "/product",
     component: ProductPage,
   },
 ];

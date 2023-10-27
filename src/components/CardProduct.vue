@@ -1,9 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="card__item">
-      <router-link to="/product" class="icon"
-        ><img click="getInfoProduct" src="http://placehold.it/200x250" alt="Post"
-      /></router-link>
+      <img @click="getInfoProduct" src="http://placehold.it/200x250" alt="Post" />
 
       <span class="food__name">Название </span>
       <span class="food__price">Цена</span>

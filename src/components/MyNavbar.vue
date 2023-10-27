@@ -2,54 +2,101 @@
   <div class="navbar">
     <div style="display: flex">
       <div>
-        <h1 @click="$router.push('/')" class="logo">Каталог</h1>
+        <img src="http://placehold.it/45x45" alt="logo" class="logo" />
       </div>
       <ul class="links">
+        <li @click="$router.push('/catalog')">Каталог</li>
         <li @click="$router.push('/promotions')">Акции</li>
-        <li @click="$router.push('/stories')">Истории заказов</li>
+        <li class="map" @click="storeListStateChange(true)">
+          <img class="img__map" src="../assets/images/map.png" alt="" />
+          <span class="map__text"> Меню {{ store }} </span>
+        </li>
+        <!-- <li @click="$router.push('/stories')">Истории заказов</li>
         <li @click="$router.push('/review')">Оставить отзывы</li>
-        <li @click="$router.push('/support')">Техподдержка</li>
+        <li @click="$router.push('/support')">Техподдержка</li> -->
       </ul>
+      <store-list-modal v-if="storesLoading" />
     </div>
-
     <div class="icons">
-      <store-list />
+      <div @click="switchBasket" class="icon">
+        <img src="../assets/images/basket.png" alt="" />
+      </div>
+      <list-basket
+        v-if="basketState"
+        v-click-outside="switchBasket"
+        class="position-list__basket"
+      />
 
-      <div @click="switchBasket" class="icon"><img src="../assets/images/basket.png" alt="" /></div>
-      <list-basket v-if="testOpen" v-click-outside="switchBasket" class="position-list__basket" />
-
-      <router-link to="/account" class="icon"
-        ><img style="width: 25px" src="../assets/images/account.png" alt=""
-      /></router-link>
+      <div @click="storeRegChange" class="icon">
+        <img style="width: 25px" src="../assets/images/account.png" alt="" />
+      </div>
+      <registration-modal v-if="regModal" />
     </div>
   </div>
 </template>
 
 <script>
-import StoreList from "@/components/StoreList.vue";
+import StoreListModal from "@/components/StoreListModal.vue";
 import ListBasket from "@/components/ListBasket.vue";
+import RegistrationModal from "@/components/RegistrationModal.vue";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
-  data() {
-    return {
-      testOpen: false,
-    };
+  components: {
+    StoreListModal,
+    ListBasket,
+    RegistrationModal,
   },
 
   methods: {
-    switchBasket() {
-      this.testOpen ? (this.testOpen = false) : (this.testOpen = true);
-    },
+    ...mapActions({
+      fetchStores: "stores/fetchStores",
+    }),
+
+    ...mapMutations({
+      storeListStateChange: "stores/storeListStateChange",
+      storeRegChange: "regWindow/storeRegChange",
+      switchBasket: "basket/switchBasket",
+    }),
   },
 
-  components: {
-    StoreList,
-    ListBasket,
+  computed: {
+    ...mapState({
+      store: (state) => state.stores.store,
+      storesLoading: (state) => state.stores.storesLoading,
+      regModal: (state) => state.regWindow.regModal,
+      basketState: (state) => state.basket.basketState,
+    }),
+  },
+
+  mounted() {
+    this.fetchStores();
+    //   setTimeout(() => {
+    //     if (this.openModal === true) {
+    //       return;
+    //     }
+    //     this.switchModal();
+    //   }, 5000);
+    // },
   },
 };
 </script>
 
 <style scoped>
+.map {
+  display: flex;
+  cursor: pointer;
+}
+.map__text {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+}
+
+.img__map {
+  width: 28px;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -58,16 +105,13 @@ export default {
 }
 
 .logo {
-  color: white;
-  font-weight: 700;
-  font-size: 30px;
-  cursor: pointer;
-  padding-right: 10px;
+  border-radius: 100%;
+  margin-right: 10px;
 }
 .links {
   list-style-type: none;
   display: flex;
-  align-items: end;
+  align-items: center;
   padding: 4px;
 }
 

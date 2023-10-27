@@ -1,8 +1,5 @@
 <template>
-  <a @click="this.setIsCategoryFood(false)" href="#" v-if="isCategoryFood" class="head__menu"
-    ><span>{{ selectedProduct }}</span></a
-  >
-  <div v-else class="wrapper">
+  <div class="wrapper">
     <a
       @click="changeCategoryFood(category.name)"
       href="#"
@@ -54,11 +51,6 @@ export default {
   display: flex;
   flex-wrap: wrap;
   margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-.head__menu {
-  margin-top: 4px;
   margin-bottom: 20px;
 }
 
