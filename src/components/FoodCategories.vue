@@ -1,116 +1,98 @@
 <template>
-  <div class="wrapper">
-    <a
-      @click="changeCategoryFood(category.name)"
-      href="#"
+  <ul class="pt-5 pb-2 px-2 mb-4 space-x-2 flex overflow-x-auto hovScroll select-none">
+    <li
+      class="whitespace-nowrap px-3 py-1 shadow-[0_4px_4px_rgba(0,0,0,0.05)] sm:hover:bg-[#ffd4a3] sm:hover:text-white rounded-full text-lg cursor-pointer"
+      @click="changeCategoryFood(category.id, category.name)"
       v-for="category in categoryFood"
       :key="category.id"
-      :class="selectedProduct === category.name ? 'selected__product' : ''"
-      class="category"
-      ><span>{{ category.name }}</span></a
+      :class="idFood === category.id ? 'bg-[#ffd4a3] text-white' : ''"
     >
-  </div>
+      <span class="">{{ category.name }}</span>
+    </li>
+  </ul>
 </template>
 
 <script>
 import { mapActions, mapMutations, mapState } from "vuex";
+import CyrillicToTranslit from "cyrillic-to-translit-js";
+
+const cyrillicToTranslit = new CyrillicToTranslit();
 
 export default {
+  data() {
+    return {};
+  },
+
   methods: {
     ...mapActions({
-      fetchCategoryFood: "categoryFood/fetchCategoryFood",
+      getProducts: "products/getProducts",
     }),
     ...mapMutations({
-      setCategoryFood: "categoryFood/setCategoryFood",
-      setIsCategoryFood: "categoryFood/setIsCategoryFood",
-      setSelectedProduct: "categoryFood/setSelectedProduct",
+      setCategoryFood: "category/setCategoryFood",
+      selectCategory: "category/selectCategory",
+      setStartingPath: "category/setStartingPath",
     }),
 
-    changeCategoryFood(category) {
-      this.setSelectedProduct(category);
-      this.setIsCategoryFood(true);
+    changeCategoryFood(id, name) {
+      this.selectCategory({ id: id });
+      localStorage.setItem("selectedCategory", JSON.stringify({ id: id, name: name }));
+      this.$router.push(cyrillicToTranslit.transform(name, "-").toLowerCase());
+    },
+
+    bunchContentWithUrl() {
+      const locPath = window.location.pathname.split("/")[1];
+      if (this.translitList[locPath]) {
+        const pathUrl = this.translitList[locPath];
+        const idRelativeToUrl = this.categoryFood.find((item) => {
+          return item.name === pathUrl;
+        });
+        console.log(idRelativeToUrl, this.params, "тут я");
+        this.selectCategory(idRelativeToUrl);
+        this.getProducts(this.params);
+      }
+    },
+    startPath() {
+      if (window.location.pathname === "/") {
+        this.$router.push(this.startingPath);
+        this.selectCategory({ id: 1 });
+      }
     },
   },
 
   computed: {
     ...mapState({
-      categoryFood: (state) => state.categoryFood.categoryFood,
-      isCategoryFood: (state) => state.categoryFood.isCategoryFood,
-      selectedProduct: (state) => state.categoryFood.selectedProduct,
+      categoryFood: (state) => state.category.categoryFood,
+      idFood: (state) => state.category.id,
+      idStore: (state) => state.stores.id,
+      startingPath: (state) => state.category.startingPath,
+      translitList: (state) => state.category.translitList,
     }),
+    params() {
+      return { params: { id: this.idFood, shop_id: this.idStore } };
+    },
   },
 
-  mounted() {
-    this.fetchCategoryFood();
+  watch: {
+    idFood() {
+      this.startPath();
+      this.params;
+      // this.bunchContentWithUrl();
+    },
   },
 };
 </script>
 
 <style scoped>
-.wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 10px;
-  margin-bottom: 20px;
+::-webkit-scrollbar {
+  height: 9px;
 }
 
-.category {
-  margin-right: 10px;
-  margin-top: 10px;
-  white-space: nowrap;
-  z-index: 0;
+::-webkit-scrollbar-thumb {
+  background: white;
+  border-radius: 10px;
 }
 
-a {
-  display: block;
-  border-radius: 20px;
-  font-size: 15px;
-  font-family: sans-serif;
-  text-decoration: none;
-  color: #333;
-  letter-spacing: 2px;
-  text-align: center;
-  position: relative;
-  transition: all 0.2s;
-  padding: 7px 20px;
-  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.2);
-}
-
-a span {
-  position: relative;
-  z-index: 2;
-}
-
-a:after {
-  position: absolute;
-  border-radius: 20px;
-  content: "";
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 100%;
-  transition: all 0.2s;
-}
-
-a:hover {
-  color: #fff;
-}
-
-a:hover:after {
-  width: 100%;
-  background: #efc14d;
-}
-
-a:focus {
-  border-radius: 20px;
-  background: #efc14d;
-  color: #fff;
-}
-
-.selected__product {
-  border-radius: 20px;
-  background: #efc14d;
-  color: #fff;
+.hovScroll:hover::-webkit-scrollbar-thumb {
+  background: #ccc;
 }
 </style>
-;

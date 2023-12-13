@@ -1,210 +1,237 @@
 <template>
-  <div class="arrow-5 arrow-5-top">
-    <div class="wrapper">
-      <div class="scroll">
-        <div class="wrapper__basket">
-          <div class="product product-left">
-            <img src="http://placehold.it/60x60" alt="" /> <button>Удалить</button>
-          </div>
-          <div class="product product-right">
-            <h3>Овсяная каша</h3>
-            <div class="product__supp">
-              <strong>Добавки:</strong>
-              <span>Без добавок</span>
-              <span>Кедровые орешки 10г</span>
-            </div>
-            <h2>1</h2>
-            <span class="product__price">100 рублей</span>
-          </div>
-        </div>
+  <div
+    class="bg-white fixed sm:absolute text-base sm:rounded-md whitespace-nowrap sm:shadow-xl sm:border sm:w-[400px] sm:max-h-[500px] inset-0 sm:inset-auto sm:right-20 sm:pt-3 sm:top-[68px]"
+  >
+    <div class="bg-[#ffd09a] sm:hidden h-20 flex justify-between items-center">
+      <h1 class="text-2xl font-semibold text-white pl-2">Корзина</h1>
+      <div @click="switchBasket" class="">
+        <img
+          class="w-10 rotate-45 active:scale-75 duration-500"
+          src="../assets/images/Plus.svg"
+          alt="close"
+        />
+      </div>
+    </div>
 
-        <div class="wrapper__basket">
-          <div class="product product-left">
-            <img src="http://placehold.it/60x60" alt="" /> <button>Удалить</button>
-          </div>
-          <div class="product product-right">
-            <h3>Овсяная каша</h3>
-            <div class="product__supp">
-              <strong>Добавки:</strong>
-              <span>Без добавок</span>
-              <span>Кедровые орешки 10г</span>
+    <section class="max-h-[480px] overflow-auto sm:max-h-96 pr-4 pl-5 mt-5 sm:mt-0 cursor-default">
+      <div class="flex justify-between border-b-2">
+        <div class="flex space-x-3">
+          <div class="mb-2">
+            <img class="rounded-md" src="http://placehold.it/90x90" alt="" />
+            <div class="flex items-center justify-center mt-1">
+              <button class="text-xs">Удалить</button>
             </div>
-            <h2>1</h2>
-            <span class="product__price">100 рублей</span>
+          </div>
+
+          <div class="last:">
+            <h2 class="font-bold mb-2">Овсяная каша</h2>
+            <div class="text-xs leading-4 mb-2">
+              <h3 class="font-semibold">Добавки:</h3>
+              <div class="flex flex-wrap">
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+              </div>
+            </div>
+            <the-counter>1</the-counter>
           </div>
         </div>
-        <div class="wrapper__basket">
-          <div class="product product-left">
-            <img src="http://placehold.it/60x60" alt="" /> <button>Удалить</button>
-          </div>
-          <div class="product product-right">
-            <h3>Овсяная каша</h3>
-            <div class="product__supp">
-              <strong>Добавки:</strong>
-              <span>Без добавок</span>
-              <span>Кедровые орешки 10г</span>
-            </div>
-            <h2>1</h2>
-            <span class="product__price">100 рублей</span>
-          </div>
-        </div>
-        <div class="wrapper__basket">
-          <div class="product product-left">
-            <img src="http://placehold.it/60x60" alt="" /> <button>Удалить</button>
-          </div>
-          <div class="product product-right">
-            <h3>Овсяная каша</h3>
-            <div class="product__supp">
-              <strong>Добавки:</strong>
-              <span>Без добавок</span>
-              <span>Кедровые орешки 10г</span>
-            </div>
-            <h2>1</h2>
-            <span class="product__price">100 рублей</span>
-          </div>
-        </div>
+        <div class="flex items-end text-lg font-medium text-orange-900">110 ₽</div>
       </div>
 
-      <div class="btn-center">
-        <button class="btn">Заказать <span>100 руб.</span></button>
+      <div class="flex justify-between border-b-2 mb-2">
+        <div class="flex space-x-3">
+          <div class="mb-2">
+            <img class="rounded-md" src="http://placehold.it/90x90" alt="" />
+            <div class="flex items-center justify-center mt-1">
+              <button class="text-xs">Удалить</button>
+            </div>
+          </div>
+
+          <div>
+            <h2 class="font-bold mb-2">Овсяная каша</h2>
+            <div class="text-xs leading-4 mb-2">
+              <h3 class="font-semibold">Добавки:</h3>
+              <div class="flex flex-wrap">
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <img class="w-5" src="../assets/images/Minus.svg" alt="Minus" />
+              <span class="mx-2 font-medium text-lg">1</span>
+              <img class="w-5" src="../assets/images/Plus.svg" alt="Plus" />
+            </div>
+          </div>
+        </div>
+        <div class="flex items-end text-lg font-medium text-orange-900">110 ₽</div>
       </div>
+
+      <div class="flex justify-between border-b-2 mb-2">
+        <div class="flex space-x-3">
+          <div class="mb-2">
+            <img class="rounded-md" src="http://placehold.it/90x90" alt="" />
+            <div class="flex items-center justify-center mt-1">
+              <button class="text-xs">Удалить</button>
+            </div>
+          </div>
+
+          <div class="last:">
+            <h2 class="font-bold mb-2">Овсяная каша</h2>
+            <div class="text-xs leading-4 mb-2">
+              <h3 class="font-semibold">Добавки:</h3>
+              <div class="flex flex-wrap">
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <img class="w-5" src="../assets/images/Minus.svg" alt="Minus" />
+              <span class="mx-2 font-medium text-lg">1</span>
+              <img class="w-5" src="../assets/images/Plus.svg" alt="Plus" />
+            </div>
+          </div>
+        </div>
+        <div class="flex items-end text-lg font-medium text-orange-900">110 ₽</div>
+      </div>
+
+      <div class="flex justify-between border-b-2 mb-2">
+        <div class="flex space-x-3">
+          <div class="mb-2">
+            <img class="rounded-md" src="http://placehold.it/90x90" alt="" />
+            <div class="flex items-center justify-center mt-1">
+              <button class="text-xs">Удалить</button>
+            </div>
+          </div>
+
+          <div class="last:">
+            <h2 class="font-bold mb-2">Овсяная каша</h2>
+            <div class="text-xs leading-4 mb-2">
+              <h3 class="font-semibold">Добавки:</h3>
+              <div class="flex flex-wrap">
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <img class="w-5" src="../assets/images/Minus.svg" alt="Minus" />
+              <span class="mx-2 font-medium text-lg">1</span>
+              <img class="w-5" src="../assets/images/Plus.svg" alt="Plus" />
+            </div>
+          </div>
+        </div>
+        <div class="flex items-end text-lg font-medium text-orange-900">110 ₽</div>
+      </div>
+      <div class="flex justify-between border-b-2 mb-2">
+        <div class="flex space-x-3">
+          <div class="mb-2">
+            <img class="rounded-md" src="http://placehold.it/90x90" alt="" />
+            <div class="flex items-center justify-center mt-1">
+              <button class="text-xs">Удалить</button>
+            </div>
+          </div>
+
+          <div class="last:">
+            <h2 class="font-bold mb-2">Овсяная каша</h2>
+            <div class="text-xs leading-4 mb-2">
+              <h3 class="font-semibold">Добавки:</h3>
+              <div class="flex flex-wrap">
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <img class="w-5" src="../assets/images/Minus.svg" alt="Minus" />
+              <span class="mx-2 font-medium text-lg">1</span>
+              <img class="w-5" src="../assets/images/Plus.svg" alt="Plus" />
+            </div>
+          </div>
+        </div>
+        <div class="flex items-end text-lg font-medium text-orange-900">110 ₽</div>
+      </div>
+      <div class="flex justify-between border-b-2 mb-2">
+        <div class="flex space-x-3">
+          <div class="mb-2">
+            <img class="rounded-md" src="http://placehold.it/90x90" alt="" />
+            <div class="flex items-center justify-center mt-1">
+              <button class="text-xs">Удалить</button>
+            </div>
+          </div>
+
+          <div class="last:">
+            <h2 class="font-bold mb-2">Овсяная каша</h2>
+            <div class="text-xs leading-4 mb-2">
+              <h3 class="font-semibold">Добавки:</h3>
+              <div class="flex flex-wrap">
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+                <p>Банан 20г,</p>
+              </div>
+            </div>
+            <div class="flex items-center">
+              <img class="w-5" src="../assets/images/Minus.svg" alt="Minus" />
+              <span class="mx-2 font-medium text-lg">1</span>
+              <img class="w-5" src="../assets/images/Plus.svg" alt="Plus" />
+            </div>
+          </div>
+        </div>
+        <div class="flex items-end text-lg font-medium text-orange-900">110 ₽</div>
+      </div>
+    </section>
+
+    <div class="text-center mb-2 pt-2">
+      <button
+        @click="order"
+        class="text-center bg-[#FFD4A3] px-16 py-2 shadow-sm rounded-md mb-1 sm:mb-0 hover:bg-opacity-90 active:scale-90 duration-300"
+      >
+        Заказать <span class="text-base font-semibold ml-6">380 ₽</span>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapMutations } from "vuex";
+import TheCounter from "./UI/TheCounter.vue";
+
+export default {
+  components: { TheCounter },
+  methods: {
+    order() {
+      this.switchBasket();
+    },
+
+    ...mapMutations({
+      switchBasket: "tracking/switchBasket",
+    }),
+  },
+};
 </script>
 
 <style scoped>
-.scroll {
-  max-height: 400px;
-  overflow-x: hidden;
-  overflow-y: auto;
+::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
 }
 
-.scroll::-webkit-scrollbar {
-  width: 6px;
-}
-
-.scroll::-webkit-scrollbar-track {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(255, 255, 255, 1) 40%,
-    rgba(154, 154, 154, 1) 40%,
-    rgba(154, 154, 154, 1) 50%,
-    rgba(154, 154, 154, 1) 60%,
-    rgba(255, 255, 255, 1) 60%,
-    rgba(255, 255, 255, 1) 100%
-  );
-}
-
-.scroll::-webkit-scrollbar-thumb {
-  background: #ccc;
-}
-
-.product__supp {
-  display: flex;
-  flex-direction: column;
-  padding-top: 10px;
-  font-size: 14px;
-}
-.product {
-  display: flex;
-  flex-direction: column;
-}
-.product-left {
-  justify-content: center;
-  align-items: center;
-  width: 60px;
-  max-height: 90px;
-}
-
-.product-left button {
-  margin-top: 6px;
-  border: none;
-  background-color: white;
-  cursor: pointer;
-}
-
-.product-right {
-  padding-left: 10px;
-}
-.product-right h2 {
-  padding-left: 25px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.product__price {
-  color: #61473b;
-  font-size: 22px;
-  font-weight: 600;
-}
-.wrapper {
-  width: 300px;
-  background-color: white;
-  box-shadow: 0 6px 19px 8px rgba(0, 0, 0, 0.15);
-  line-height: 1;
-  margin: auto;
-  padding-left: 5px;
-  padding-top: 12px;
-}
-
-.wrapper__basket {
-  display: flex;
-  padding-left: 13px;
-  padding-bottom: 10px;
-  margin-bottom: 5px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  width: 290px;
-}
-.arrow-5-top {
-  z-index: 10;
-}
-.arrow-5-top::after {
-  content: "";
-  width: 0;
-  height: 0;
-  display: block;
-  position: absolute;
-  z-index: 10;
-  border: 0;
-}
-.arrow-5-top::after {
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  margin-left: -10px;
-  right: 19%;
-  border-bottom: 10px solid white;
-  top: -10px;
-}
-
-.btn-center {
-  text-align: center;
-  padding-right: 5px;
-}
-.btn {
-  padding: 8px 50px;
-  margin: 10px 0;
-  background-color: #f8dfa0;
-  font-size: 14px;
-  border: none;
-  border-radius: 2px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.btn span {
-  margin-left: 20px;
-  font-weight: 900;
-}
-
-.btn:hover {
-  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
-}
-.btn:active {
-  transform: scale(0.99);
+::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 5px;
 }
 </style>

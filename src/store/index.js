@@ -1,14 +1,18 @@
 import { createStore } from "vuex";
 import { storesModule } from "./storesModule";
-import { categoriesFoodModule } from "./categoriesFoodModule";
-import { regModule } from "./regModule";
-import { basketModule } from "./basketModule";
+import { foodCategoriesModule } from "./foodCategoriesModule";
+import { accountModule } from "./accountModule";
+import { productsModule } from "./productsModule";
+import { trackingModule } from "./trackingModule";
+import { productModule } from "./productModule";
 
 export default createStore({
   modules: {
     stores: storesModule,
-    categoryFood: categoriesFoodModule,
-    regWindow: regModule,
-    basket: basketModule,
+    category: foodCategoriesModule,
+    account: accountModule,
+    tracking: trackingModule,
+    products: productsModule,
+    product: productModule,
   },
 });

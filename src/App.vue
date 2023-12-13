@@ -1,38 +1,42 @@
 <template>
-  <my-navbar />
-  <div class="app">
+  <the-navbar />
+  <main class="max-w-screen-xl m-auto">
     <router-view></router-view>
-  </div>
+  </main>
 </template>
 
 <script>
-import MyNavbar from "@/components/MyNavbar";
+import TheNavbar from "@/components/TheNavbar";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "App",
-
+  data() {
+    return {
+      locPath: location.pathname,
+    };
+  },
   components: {
-    MyNavbar,
+    TheNavbar,
+  },
+  methods: {
+    ...mapActions({
+      fetchCategoryFood: "category/fetchCategoryFood",
+    }),
+  },
+
+  computed: {
+    ...mapState({
+      idFood: (state) => state.category.id,
+      startingPath: (state) => state.category.startingPath,
+    }),
   },
 };
 </script>
 
 <style>
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  padding: 0 calc(20px - (100vw - 100%)) 0 0;
-}
-
-.app {
-  max-width: 1280px;
-  margin: 0 auto;
-}
-body {
-  padding: 0 calc(20px - (100vw - 100%)) 0 0;
+  font-family: "Graphik", sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 </style>

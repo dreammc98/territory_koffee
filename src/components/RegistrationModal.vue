@@ -1,6 +1,6 @@
 <template>
-  <my-modal>
-    <div class="wrapper" v-click-outside="deactivationModal">
+  <the-modal>
+    <div class="wrapper" v-click-outside="storeRegChange">
       <div class="wrapper-form">
         <h1>Привет! ✌</h1>
         <p>Войдите, чтобы заказывать кофе заранее и пользоваться нашими акциями</p>
@@ -20,32 +20,29 @@
         </form>
 
         <div class="links">
-          <p class="link" @click="deactivationModal">Пропустить и указать позже</p>
-          <p class="link link__info">Условия использования и персональные данные</p>
+          <a class="link" @click="deactivationModal">Пропустить и указать позже</a>
+          <a class="link link__info">Условия использования и персональные данные</a>
         </div>
       </div>
     </div>
-  </my-modal>
+  </the-modal>
 </template>
 
 <script>
 import { vMaska } from "maska";
-import MyModal from "@/components/MyModal.vue";
+import TheModal from "@/components/TheModal.vue";
 import { mapMutations } from "vuex";
 
 export default {
   methods: {
     ...mapMutations({
-      storeRegChange: "regWindow/storeRegChange",
+      storeRegChange: "account/changeAccountStatus",
     }),
-    deactivationModal() {
-      this.storeRegChange();
-    },
   },
 
   directives: { maska: vMaska },
   components: {
-    MyModal,
+    TheModal,
   },
 };
 </script>
@@ -124,6 +121,7 @@ a {
 .link {
   text-decoration: underline;
   cursor: pointer;
+  color: white;
 }
 
 .link__info {

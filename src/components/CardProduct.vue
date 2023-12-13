@@ -1,97 +1,111 @@
 <template>
-  <div class="wrapper">
-    <div class="card__item">
-      <img @click="getInfoProduct" src="http://placehold.it/200x250" alt="Post" />
+  <the-loader v-if="loader" />
 
-      <span class="food__name">Название </span>
-      <span class="food__price">Цена</span>
+  <section v-if="!loader">
+    <div
+      v-if="stateContent"
+      class="grid grid-cols-2 gap-4 px-2 m:grid-cols-3 sm:grid-cols-4 lg:grid-cols-5"
+    >
+      <div
+        class="text-lg text-center leading-6 cursor-pointer"
+        @click="getProd(product.id), switchProdModal()"
+        v-for="product in products"
+        :key="product.id"
+      >
+        <img class="rounded-xl w-full" :src="product.image" alt="Product" />
+        <h3 class="text-[#2d2d2d] font-medium">{{ product.product_name }}</h3>
+        <span class="text-[#7A7A7A] text-base">от {{ product.price }}₽</span>
+      </div>
     </div>
-    <div class="card__item">
-      <img src="http://placehold.it/200x250" alt="Post" />
-      <span class="food__name">Название </span>
-      <span class="food__price">Цена</span>
-    </div>
-    <div class="card__item">
-      <img src="http://placehold.it/200x250" alt="Post" />
-      <span class="food__name">Название </span>
-      <span class="food__price">Цена</span>
-    </div>
-    <div class="card__item">
-      <img src="http://placehold.it/200x250" alt="Post" />
-      <span class="food__name">Название </span>
-      <span class="food__price">Цена</span>
-    </div>
-    <div class="card__item">
-      <img src="http://placehold.it/200x250" alt="Post" />
-      <span class="food__name">Название </span>
-      <span class="food__price">Цена</span>
-    </div>
-    <div class="card__item">
-      <img src="http://placehold.it/200x250" alt="Post" />
-      <span class="food__name">Название </span>
-      <span class="food__price">Цена</span>
-    </div>
-    <div class="card__item">
-      <img src="http://placehold.it/200x250" alt="Post" />
-      <span class="food__name">Название </span>
-      <span class="food__price">Цена</span>
-    </div>
-    <div class="card__item">
-      <img src="http://placehold.it/200x250" alt="Post" />
-      <span class="food__name">Название </span>
-      <span class="food__price">Цена</span>
-    </div>
-    <div class="card__item">
-      <img src="http://placehold.it/200x250" alt="Post" />
-      <span class="food__name">Название </span>
-      <span class="food__price">Цена</span>
-    </div>
-    <div class="card__item">
-      <img src="http://placehold.it/200x250" alt="Post" />
-      <span class="food__name">Название </span>
-      <span class="food__price">Цена</span>
-    </div>
-  </div>
+
+    <div v-if="!stateContent" class="text-center text-2xl"><p>Раздел пуст</p></div>
+  </section>
+  <transition name="product" class="duration-75">
+    <product-modal v-if="prodModal" />
+  </transition>
 </template>
 
 <script>
+import { mapActions, mapMutations, mapState } from "vuex";
+import ProductModal from "@/components/ProductModal.vue";
+import TheLoader from "@/components/UI/TheLoader.vue";
+
 export default {
+  data() {
+    return {
+      stateContent: true,
+    };
+  },
+
+  components: { ProductModal, TheLoader },
   methods: {
-    getInfoProduct() {
-      this.$router.push("/product");
+    getProd(id) {
+      this.getProduct({ params: { id: id } });
+    },
+
+    ...mapActions({
+      getProducts: "products/getProducts",
+      getProduct: "product/getProduct",
+    }),
+    ...mapMutations({
+      setIdProduct: "product/setId",
+      switchProdModal: "product/switchProdModal",
+    }),
+
+    showProducts() {
+      if (this.products.length === 0) {
+        this.stateContent = false;
+      } else {
+        this.stateContent = true;
+      }
     },
   },
+
+  computed: {
+    ...mapState({
+      idFood: (state) => state.category.id,
+      idStore: (state) => state.stores.id,
+      products: (state) => state.products.products,
+      prodModal: (state) => state.product.prodModal,
+      loader: (state) => state.category.loader,
+    }),
+
+    paramsForProducts() {
+      return { params: { id: this.idFood, shop_id: this.idStore } };
+    },
+  },
+
+  watch: {
+    idFood() {
+      this.getProducts(this.paramsForProducts);
+    },
+
+    idStore() {
+      setTimeout(() => {
+        this.getProducts(this.paramsForProducts);
+      }, 100);
+    },
+    products() {
+      this.showProducts();
+    },
+  },
+
+  mounted() {},
 };
 </script>
 
 <style scoped>
-.wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  padding-left: 20px;
-}
-.card__item {
-  display: flex;
-  flex-direction: column;
-  max-width: 200px;
-  align-items: center;
-  line-height: 1;
-  margin-right: 8px;
-  margin-bottom: 8px;
+.product-enter-active {
+  transition: all 0.3s ease-out;
 }
 
-img {
-  border-radius: 10px;
+.product-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
 }
 
-.food__name {
-  margin: 5px 0;
-  padding: 0 8px;
-  text-align: center;
-}
-
-.food__price {
-  color: #7a7a7a;
+.product-enter-from,
+.product-leave-to {
+  transform: translateY(-20px);
+  opacity: 0;
 }
 </style>
-;
