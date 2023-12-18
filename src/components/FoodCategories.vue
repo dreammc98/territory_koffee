@@ -39,18 +39,6 @@ export default {
       this.$router.push(cyrillicToTranslit.transform(name, "-").toLowerCase());
     },
 
-    bunchContentWithUrl() {
-      const locPath = window.location.pathname.split("/")[1];
-      if (this.translitList[locPath]) {
-        const pathUrl = this.translitList[locPath];
-        const idRelativeToUrl = this.categoryFood.find((item) => {
-          return item.name === pathUrl;
-        });
-        console.log(idRelativeToUrl, this.params, "тут я");
-        this.selectCategory(idRelativeToUrl);
-        this.getProducts(this.params);
-      }
-    },
     startPath() {
       if (window.location.pathname === "/") {
         this.$router.push(this.startingPath);
@@ -67,16 +55,15 @@ export default {
       startingPath: (state) => state.category.startingPath,
       translitList: (state) => state.category.translitList,
     }),
-    params() {
-      return { params: { id: this.idFood, shop_id: this.idStore } };
-    },
+    // params() {
+    //   return { params: { id: this.idFood, shop_id: this.idStore } };
+    // },
   },
 
   watch: {
     idFood() {
       this.startPath();
-      this.params;
-      // this.bunchContentWithUrl();
+      // this.params;
     },
   },
 };

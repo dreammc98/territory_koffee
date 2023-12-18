@@ -33,12 +33,17 @@
 
       <div class="flex items-center justify-end">
         <div class="flex items-center space-x-3">
-          <div @click="switchBasket" @touchstart.stop class="w-9 relative">
-            <img class="cursor-pointer" src="../assets/images/basket.png" alt="basket" />
+          <div @click="cartCount > 0 ? switchBasket() : ''" @touchstart.stop class="w-9 relative">
+            <img
+              :class="cartCount > 0 ? 'cursor-pointer' : 'cursor-auto'"
+              src="../assets/images/basket.png"
+              alt="basket"
+            />
             <div
+              v-if="cartCount > 0"
               class="cursor-pointer select-none absolute px-[4px] py-[2px] top-0 -right-1 text-xs bg-[#ffd4a3] font-medium text-white rounded-full align-middle drop-shadow-2xl border-[1px] border-black border-opacity-10 leading-none"
             >
-              2
+              {{ cartCount }}
             </div>
           </div>
 
@@ -86,10 +91,12 @@
         </div>
       </div>
     </div>
-    <transition name="basket">
+    <transition name="modal">
       <list-basket v-if="basketState" v-click-outside="switchBasket" />
     </transition>
-    <registration-modal v-if="regModal" />
+    <transition name="modal">
+      <registration-modal v-if="regModal" />
+    </transition>
   </header>
 </template>
 
@@ -116,6 +123,7 @@ export default {
       switchBasket: "tracking/switchBasket",
       setPathLink: "tracking/setPathLink",
       selectCategory: "category/selectCategory",
+      changeAccountStatus: "account/changeAccountStatus",
     }),
 
     getPathUrl() {
@@ -131,6 +139,7 @@ export default {
       pathLink: (state) => state.tracking.pathLink,
       IdFood: (state) => state.category.id,
       startingPath: (state) => state.category.startingPath,
+      cartCount: (state) => state.product.cartCount,
     }),
   },
 
@@ -167,16 +176,16 @@ export default {
   opacity: 0;
 }
 
-.basket-enter-active {
+.modal-enter-active {
   transition: all 0.3s ease-out;
 }
 
-.basket-leave-active {
+.modal-leave-active {
   transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
 }
 
-.basket-enter-from,
-.basket-leave-to {
+.modal-enter-from,
+.modal-leave-to {
   transform: translateY(-20px);
   opacity: 0;
 }

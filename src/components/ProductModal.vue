@@ -1,21 +1,22 @@
 <template>
-  <the-modal>
+  <div class="fixed inset-0 bg-black bg-opacity-50 z-20 flex items-center justify-center">
     <section
       v-for="product in selectedProduct"
       :key="product.id"
-      v-click-outside="switchProdModal"
-      class="fixed inset-0 md:inset-auto md:w-[710px] md:h-[600px] bg-white md:rounded-xl"
+      v-click-outside="outsideExit"
+      class="fixed md:w-[710px] md:h-[600px] bg-white md:rounded-xl"
     >
-      <the-loader
-        v-if="loader"
-        class="absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
-      />
-
-      <div class="bg-[#ffd09a] md:hidden h-16 flex justify-between items-center">
+      <span class="hidden md:block">
+        <the-loader
+          v-if="loader"
+          class="absolute top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%]"
+        />
+      </span>
+      <div v-if="content" class="bg-[#ffd09a] md:hidden h-16 flex justify-between items-center">
         <h1 class="text-2xl font-semibold text-white pl-2">
           {{ content ? product.product_name : "" }}
         </h1>
-        <div @click="switchProdModal" class="">
+        <div @click="outsideExit">
           <img
             class="w-10 rotate-45 active:scale-75 duration-500"
             src="../assets/images/Plus.svg"
@@ -26,65 +27,16 @@
 
       <div
         v-if="content"
-        class="flex flex-col md:items-center md:justify-between max-h-[520px] md:max-h-full overflow-auto md:overflow-hidden"
+        class="flex flex-col md:items-center md:justify-between max-h-[500px] md:max-h-full overflow-auto md:overflow-hidden"
       >
         <div class="md:flex md:pt-6 md:px-2 md:mb-4 leading-6">
           <div class="flex flex-col md:pl-7 md:mr-8">
             <div class="mx-auto mt-2 md:m-0">
               <img class="rounded-lg md:w-full h-[400px]" :src="product.image" alt="Image" />
             </div>
-
-            <div
-              v-if="
-                product.energyAmount !== 'NaN' &&
-                product.proteinsAmount !== 'NaN' &&
-                product.fatAmount !== 'NaN' &&
-                product.carbohydratesAmount !== 'NaN'
-              "
-              class="hidden md:block mt-3 leading-4 whitespace-nowrap"
-            >
-              <span class="font-medium text-lg whitespace-normal"
-                >Калорийность "{{ product.product_name }}"</span
-              >
-              <div class="flex space-x-5">
-                <div>
-                  <div class="text-lg font-semibold">
-                    {{
-                      product.energyAmount && product.energyAmount !== "NaN"
-                        ? product.energyAmount
-                        : 0
-                    }}
-                  </div>
-                  <div class="text-gray-800">Ккал</div>
-                </div>
-                <div>
-                  <div class="text-lg font-semibold">
-                    {{
-                      product.proteinsAmount && product.proteinsAmount !== "NaN"
-                        ? product.proteinsAmount
-                        : 0
-                    }}
-                  </div>
-                  <div class="text-gray-800">Белки, г</div>
-                </div>
-                <div>
-                  <div class="text-lg font-semibold">
-                    {{ product.fatAmount && product.fatAmount !== "NaN" ? product.fatAmount : 0 }}
-                  </div>
-                  <div class="text-gray-800">Жиры, г</div>
-                </div>
-                <div>
-                  <div class="text-lg font-semibold">
-                    {{
-                      product.carbohydratesAmount && product.carbohydratesAmount !== "NaN"
-                        ? product.carbohydratesAmount
-                        : 0
-                    }}
-                  </div>
-                  <div class="text-gray-800">Углеводы, г</div>
-                </div>
-              </div>
-            </div>
+            <span class="hidden md:block">
+              <TheСalorieCounter />
+            </span>
           </div>
 
           <div class="px-4 md:px-0 md:pr-4">
@@ -95,17 +47,42 @@
                 <p v-else class=""><i>Описание отсутствует</i></p>
               </div>
 
-              <form v-for="groups in product.options" :key="groups.id" class="mt-4 pr-1">
-                <section v-if="groups.max_amount === 1" class="space-y-2">
+              <form
+                id="coffee-detail"
+                v-for="groups in product.options"
+                :key="groups.id"
+                class="mt-4 pr-1"
+              >
+                <section
+                  @change="setRadioOption"
+                  v-if="groups.max_amount === 1"
+                  :value="groups.min_amount === 1 || groups.required ? groups.values[0].id : ``"
+                  class="space-y-2"
+                >
                   <h3 class="text-lg font-semibold">{{ groups.name }}</h3>
                   <label
                     v-for="option in groups.values"
+                    :id="option.id"
                     :key="option.id"
+                    @click="calcRadioPrice(option)"
                     class="flex items-center justify-between whitespace-nowrap cursor-pointer"
-                    @change="calcRadioPrice(option)"
                   >
-                    <section class="flex">
-                      <input type="radio" name="option" class="w-4" />
+                    <section
+                      class="flex"
+                      :allow-empty-selection="
+                        groups.min_amount === 1 || groups.required ? `false` : `true`
+                      "
+                      :value="groups.min_amount === 1 || groups.required ? groups.values[0].id : ``"
+                    >
+                      <input
+                        type="radio"
+                        name="option"
+                        :id="'input' + option.id"
+                        class="w-4 cursor-pointer"
+                        :value="
+                          groups.min_amount === 1 || groups.required ? groups.values[0].id : ``
+                        "
+                      />
                       <p class="ml-2 text-base font-normal md:font-medium">
                         {{ option.name }}
                       </p>
@@ -123,11 +100,17 @@
                   <label
                     v-for="option in groups.values"
                     :key="option.id"
+                    :value="option.id"
                     class="flex items-center justify-between whitespace-nowrap cursor-pointer"
                     @change="calculatePrice(option)"
+                    :checked="
+                      (groups.min_amount === 1 || groups.required) && groups.values[0] === option
+                        ? `true`
+                        : `false`
+                    "
                   >
                     <section class="flex">
-                      <input type="checkbox" class="w-4" />
+                      <input type="checkbox" class="w-4 cursor-pointer" />
                       <p class="ml-2 text-base font-normal md:font-medium">
                         {{ option.name }}
                       </p>
@@ -140,15 +123,17 @@
                 </section>
               </form>
             </div>
+            <span class="md:hidden">
+              <TheСalorieCounter />
+            </span>
 
-            <div class="self-end whitespace-nowrap">
+            <div class="hidden md:block self-end whitespace-nowrap">
               <p class="flex justify-end font-semibold text-lg">{{ calcPrice }} ₽</p>
 
               <div class="flex justify-end">
-                <the-counter class="w-6 mr-16"><span class="mx-2 text-xl">2</span></the-counter>
                 <button
-                  @click="switchProdModal"
-                  class="whitespace-nowrap px-16 py-2 shadow-[0_4px_4px_rgba(0,0,0,0.05)] bg-[#edc69a] text-white rounded-full text-lg cursor-pointer"
+                  @click.once="sendForProcessing"
+                  class="whitespace-nowrap px-16 py-2 shadow-[0_4px_4px_rgba(0,0,0,0.05)] bg-[#edc69a] text-white rounded-full text-lg cursor-pointer hover:bg-[#d5b28b]"
                 >
                   ДОБАВИТЬ
                 </button>
@@ -157,15 +142,26 @@
           </div>
         </div>
       </div>
+
+      <div v-if="content" class="md:hidden self-end whitespace-nowrap">
+        <div class="flex justify-center">
+          <button
+            @click="sendForProcessing"
+            class="my-1 space-x-10 whitespace-nowrap px-16 py-2 shadow-[0_4px_4px_rgba(0,0,0,0.05)] bg-[#edc69a] text-white rounded-full text-lg cursor-pointer hover:bg-[#d5b28b]"
+          >
+            <span>ДОБАВИТЬ</span> <span>{{ calcPrice + " ₽" }}</span>
+          </button>
+        </div>
+      </div>
     </section>
-  </the-modal>
+  </div>
 </template>
 
 <script>
-import TheModal from "./TheModal.vue";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import TheLoader from "./UI/TheLoader.vue";
-import TheCounter from "./UI/TheCounter.vue";
+import TheСalorieCounter from "./TheСalorieCounter";
+// import LS from "@/localStorage/localStorage";
 
 export default {
   data: () => {
@@ -173,29 +169,99 @@ export default {
       selectedOptions: [],
       calcPrice: 0,
       priceRadio: 0,
+      arrProductsBasket: [],
+      radioId1: null,
+      radioId2: null,
+      checkboxOptions: null,
+      productData: {},
+      boolRadio: false,
     };
   },
-  components: { TheModal, TheLoader, TheCounter },
+  components: { TheLoader, TheСalorieCounter },
   methods: {
     ...mapMutations({
       switchProdModal: "product/switchProdModal",
     }),
+    ...mapActions({
+      addToCart: "product/addToCart",
+    }),
+
+    setRadioOption(e) {
+      const hiddenInput = e.target;
+
+      if ("createEvent" in document) {
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("change", false, true);
+        hiddenInput.dispatchEvent(evt);
+      } else {
+        hiddenInput.fireEvent("onchange");
+      }
+    },
+
+    outsideExit() {
+      this.switchProdModal();
+      this.$router.go(-1);
+    },
+
+    async sendForProcessing() {
+      const params = {};
+      const wholeList = this.selectedProduct.product;
+      const arrOption_2 = [];
+
+      params.id = [`${wholeList.id}`];
+
+      const form = document.getElementById("coffee-detail"); //Вся карточка
+      const formData = new FormData(form);
+      const options = [];
+
+      for (let option_1 of formData.entries()) {
+        if (option_1 !== null) {
+          this.radioId1 = option_1[1];
+          options.push(option_1[1]);
+        }
+      }
+
+      for (let option_2 of this.selectedOptions) {
+        if (option_2 !== null) {
+          arrOption_2.push(JSON.stringify(option_2.id));
+          options.push(JSON.stringify(option_2.id));
+        }
+      }
+
+      if (arrOption_2.length > 0) {
+        this.checkboxOptions = arrOption_2.join();
+      }
+      if (this.radioId2) {
+        options.push(this.radioId2);
+      }
+
+      if (this.radioId1 || this.checkboxOptions || this.radioId2) {
+        options.filter((item) => typeof item === "string");
+
+        params.options = [...new Set(options)];
+      }
+      params.price = [JSON.stringify(wholeList.price)];
+
+      this.addToCart(params);
+      setTimeout(() => {
+        this.outsideExit();
+      }, 300);
+    },
 
     calculatePrice(option) {
-      let idPrice = { id: option.id, price: option.price };
-      let pricePlus = { price: idPrice.price, symbol: "plus" };
-      let priceMinus = { price: idPrice.price, symbol: "minus" };
+      let productData = { id: option.id, price: option.price, name: option.name };
+      let pricePlus = { price: productData.price, symbol: "plus" };
+      let priceMinus = { price: productData.price, symbol: "minus" };
 
       if (this.selectedOptions.length === 0) {
-        this.selectedOptions.push(idPrice);
+        this.selectedOptions.push(productData);
         this.changeCalcPrice(pricePlus);
       } else {
-        console.log(this.selectedOptions.find((category) => category.id === 8));
-        if (this.selectedOptions.find((category) => category.id === idPrice.id)) {
-          this.selectedOptions = this.selectedOptions.filter((filt) => filt.id !== idPrice.id);
+        if (this.selectedOptions.find((category) => category.id === productData.id)) {
+          this.selectedOptions = this.selectedOptions.filter((filt) => filt.id !== productData.id);
           this.changeCalcPrice(priceMinus);
         } else {
-          this.selectedOptions.push(idPrice);
+          this.selectedOptions.push(productData);
           this.changeCalcPrice(pricePlus);
         }
       }
@@ -208,19 +274,42 @@ export default {
         this.calcPrice -= value.price;
       }
     },
+
     calcRadioPrice(option) {
+      // let input = document.getElementById(`${option.id}`);
+      // let child = input.querySelector(`#input${option.id}`);
+
+      // if (this.productData.id === option.id) {
+      //   child.disabled = true;
+      //   this.productData = {};
+      //   if (option.parent_id !== 1) {
+      //     this.calcPrice -= this.priceRadio;
+      //     this.priceRadio = 0;
+      //   }
+      //   return;
+      // }
+
+      this.productData = { id: option.id, price: option.price, name: option.name };
       if (option.parent_id === 1) {
         return;
       }
       if (this.priceRadio === 0) {
         this.calcPrice += option.price;
         this.priceRadio = option.price;
-        console.log("первый ");
       } else {
         this.calcPrice -= this.priceRadio;
         this.calcPrice += option.price;
         this.priceRadio = option.price;
-        console.log("второй");
+      }
+
+      this.radioId2 = JSON.stringify(this.productData.id);
+    },
+
+    setPathUrl() {
+      const pathName = window.location.pathname.split("/").length;
+      if (pathName === 2) {
+        let translitFood = this.translitFood;
+        this.$router.push({ path: `${window.location.pathname}/${translitFood}` });
       }
     },
   },
@@ -230,11 +319,13 @@ export default {
       loader: (state) => state.product.loader,
       content: (state) => state.product.content,
       priceFood: (state) => state.product.priceFood,
+      translitFood: (state) => state.product.translitFood,
     }),
   },
   watch: {
     loader() {
       this.calcPrice = this.priceFood;
+      this.setPathUrl();
     },
   },
 };

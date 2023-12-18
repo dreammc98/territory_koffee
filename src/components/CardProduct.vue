@@ -68,6 +68,8 @@ export default {
       products: (state) => state.products.products,
       prodModal: (state) => state.product.prodModal,
       loader: (state) => state.category.loader,
+      productId: (state) => state.products.productId,
+      finishLoad: (state) => state.products.finishLoad,
     }),
 
     paramsForProducts() {
@@ -86,11 +88,17 @@ export default {
       }, 100);
     },
     products() {
-      this.showProducts();
+      setTimeout(() => {
+        this.showProducts();
+      }, 500);
+    },
+    finishLoad() {
+      if (window.location.pathname.split("/")[2]) {
+        this.getProd(this.productId);
+        this.switchProdModal();
+      }
     },
   },
-
-  mounted() {},
 };
 </script>
 

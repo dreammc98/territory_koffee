@@ -2,9 +2,9 @@
   <div class="bg-[#ffd4a3] absolute top-[68px] right-3 text-base px-4 rounded-md whitespace-nowrap">
     <ul class="text-center py-1">
       <li
-        class="align-middle py-2 border-b-[1px] border-black border-opacity-10 rounded-lg hover:text-white hover:bg-black hover:bg-opacity-10"
+        class="align-middle py-2 border-b-[1px] border-black border-opacity-10 rounded-lg hover:text-white hover:bg-black hover:bg-opacity-10 cursor-pointer"
       >
-        <div @click="switchBurger">Регистрация</div>
+        <div @click="changeAccountStatus(), switchBurger()">Регистрация</div>
         <div v-show="false" class="text-center">Аккаунт <span>+7 999 99 99</span></div>
       </li>
 
@@ -12,7 +12,7 @@
         @click="activeLink(itemMenu)"
         v-for="itemMenu in menu"
         :key="itemMenu.id"
-        class="align-center py-2 border-b-[1px] border-black border-opacity-10 rounded-lg hover:bg-black hover:bg-opacity-10 hover:text-white"
+        class="cursor-pointer align-center py-2 border-b-[1px] border-black border-opacity-10 rounded-lg hover:bg-black hover:bg-opacity-10 hover:text-white"
         :class="pathLink === itemMenu.path ? 'text-white' : ''"
       >
         {{ itemMenu.name }}
@@ -20,7 +20,7 @@
 
       <li
         @click="logout"
-        class="align-center py-2 rounded-lg hover:bg-black hover:bg-opacity-10 hover:text-white"
+        class="cursor-pointer align-center py-2 rounded-lg hover:bg-black hover:bg-opacity-10 hover:text-white"
       >
         Выход
       </li>
@@ -51,6 +51,7 @@ export default {
     ...mapMutations({
       switchBurger: "tracking/switchBurger",
       setPathLink: "tracking/setPathLink",
+      changeAccountStatus: "account/changeAccountStatus",
     }),
     activeLink(item) {
       this.$router.push(item.path);

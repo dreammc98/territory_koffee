@@ -3,16 +3,16 @@
     <the-location />
     <span @click="storeListStateChange" class="">Изменить</span>
   </div>
-
   <food-categories />
   <card-product />
+  <router-view v-if="prodModal"></router-view>
 </template>
 
 <script>
 import FoodCategories from "@/components/FoodCategories.vue";
 import CardProduct from "@/components/CardProduct.vue";
 import TheLocation from "@/components/TheLocation.vue";
-import { mapMutations, mapActions } from "vuex";
+import { mapMutations, mapActions, mapState } from "vuex";
 
 export default {
   data() {
@@ -31,6 +31,11 @@ export default {
     }),
     ...mapActions({
       fetchCategoryFood: "category/fetchCategoryFood",
+    }),
+  },
+  computed: {
+    ...mapState({
+      prodModal: (state) => state.product.prodModal,
     }),
   },
 

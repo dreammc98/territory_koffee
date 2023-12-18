@@ -20,9 +20,6 @@ export const trackingModule = {
       state.pathLink = path;
     },
     switchForReg(state) {
-      if (state.forRegState) {
-        return (state.forRegState = false);
-      }
       state.forRegState ? (state.forRegState = false) : (state.forRegState = true);
     },
   },

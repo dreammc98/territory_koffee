@@ -31,6 +31,17 @@ export const foodCategoriesModule = {
       });
     },
 
+    bunchContentWithUrl(state) {
+      const locPath = window.location.pathname.split("/")[1];
+      if (state.translitList[locPath]) {
+        const pathUrl = state.translitList[locPath];
+        const idRelativeToUrl = state.categoryFood.find((item) => {
+          return item.name === pathUrl;
+        });
+        state.id = idRelativeToUrl.id;
+      }
+    },
+
     selectCategory(state, selectedCategory) {
       state.id = selectedCategory.id;
     },
@@ -47,13 +58,14 @@ export const foodCategoriesModule = {
       commit("switchStateLoader", true);
       try {
         const { data } = await operations.getCategories();
-
         commit("setCategoryFood", data.categories);
+
         if (JSON.parse(localStorage.getItem("selectedCategory"))) {
           commit("selectCategory", JSON.parse(localStorage.getItem("selectedCategory")));
         } else {
           commit("selectCategory", data.defaultCategory);
         }
+        commit("bunchContentWithUrl");
         commit("switchStateLoader", false);
       } catch (e) {
         alert(e);
