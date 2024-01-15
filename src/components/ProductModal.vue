@@ -213,32 +213,28 @@ export default {
       const form = document.getElementById("coffee-detail"); //Вся карточка
       const formData = new FormData(form);
       const options = [];
-
       for (let option_1 of formData.entries()) {
         if (option_1 !== null) {
           this.radioId1 = option_1[1];
           options.push(option_1[1]);
         }
       }
-
       for (let option_2 of this.selectedOptions) {
         if (option_2 !== null) {
           arrOption_2.push(JSON.stringify(option_2.id));
           options.push(JSON.stringify(option_2.id));
         }
       }
-
       if (arrOption_2.length > 0) {
         this.checkboxOptions = arrOption_2.join();
       }
       if (this.radioId2) {
         options.push(this.radioId2);
       }
-
       if (this.radioId1 || this.checkboxOptions || this.radioId2) {
         options.filter((item) => typeof item === "string");
-
         params.options = [...new Set(options)];
+        params.options = params.options.filter((item) => item !== "");
       }
       params.price = [JSON.stringify(wholeList.price)];
 
@@ -276,19 +272,6 @@ export default {
     },
 
     calcRadioPrice(option) {
-      // let input = document.getElementById(`${option.id}`);
-      // let child = input.querySelector(`#input${option.id}`);
-
-      // if (this.productData.id === option.id) {
-      //   child.disabled = true;
-      //   this.productData = {};
-      //   if (option.parent_id !== 1) {
-      //     this.calcPrice -= this.priceRadio;
-      //     this.priceRadio = 0;
-      //   }
-      //   return;
-      // }
-
       this.productData = { id: option.id, price: option.price, name: option.name };
       if (option.parent_id === 1) {
         return;

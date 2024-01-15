@@ -2,7 +2,7 @@
   <div
     class="bg-white fixed sm:absolute text-base sm:rounded-md whitespace-nowrap sm:shadow-xl sm:border sm:w-[400px] sm:max-h-[500px] inset-0 sm:inset-auto sm:right-20 sm:pt-3 sm:top-[68px]"
   >
-    <div class="bg-[#ffd09a] sm:hidden h-20 flex justify-between items-center">
+    <div class="bg-[#ffd09a] sm:hidden h-16 flex justify-between items-center">
       <h1 class="text-2xl font-semibold text-white pl-2">Корзина</h1>
       <div @click="switchBasket">
         <img
@@ -90,16 +90,24 @@
         Заказать <span class="text-base font-semibold ml-6">{{ cartTotal }} ₽</span>
       </button>
     </div>
+    <transition name="check">
+      <checkout-modal v-if="checkoutState" />
+    </transition>
   </div>
 </template>
 
 <script>
 import { mapMutations, mapState } from "vuex";
+import CheckoutModal from "@/components/CheckoutModal.vue";
 
 export default {
+  components: {
+    CheckoutModal,
+  },
+
   methods: {
     order() {
-      this.switchBasket();
+      this.changeCheckout();
     },
 
     changeAmountBut(lineId, action) {
@@ -124,6 +132,7 @@ export default {
       calculateCartTotal: "product/calculateCartTotal",
       cartCount: "product/cartCount",
       removeCartItem: "product/removeCartItem",
+      changeCheckout: "checkout/changeCheckout",
     }),
   },
 
@@ -131,7 +140,11 @@ export default {
     ...mapState({
       cart: (state) => state.product.cart,
       cartTotal: (state) => state.product.cartTotal,
+      checkoutState: (state) => state.checkout.checkoutState,
     }),
+  },
+  created() {
+    console.log(this.checkoutState);
   },
 };
 </script>
@@ -145,5 +158,19 @@ export default {
 ::-webkit-scrollbar-thumb {
   background: gray;
   border-radius: 5px;
+}
+
+.check-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.check-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.check-enter-from,
+.check-leave-to {
+  transform: translateY(-20px);
+  opacity: 0;
 }
 </style>

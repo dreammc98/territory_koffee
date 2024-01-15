@@ -34,15 +34,27 @@ export default {
         this.cartCount();
       }
     },
+    loadAccount() {
+      console.log(LS.getStorage("userData"));
+      if (LS.getStorage("userData") && LS.getStorage("isAuthorized")) {
+        this.storageAccount(LS.getStorage("userData"));
+      }
+    },
     ...mapMutations({
       setCart: "product/setCart",
       setLineIdCount: "product/setLineIdCount",
       setCartTotal: "product/setCartTotal",
       cartCount: "product/cartCount",
+      storageAccount: "account/storageAccount",
     }),
     ...mapActions({
       fetchCategoryFood: "category/fetchCategoryFood",
     }),
+
+    // homePage() {
+    //   if (location.path === "/") {
+    //   }
+    // },
   },
 
   computed: {
@@ -54,6 +66,7 @@ export default {
 
   created() {
     this.loadCart();
+    this.loadAccount();
   },
 };
 </script>

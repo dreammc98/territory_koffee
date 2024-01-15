@@ -45,6 +45,10 @@ export default {
         this.selectCategory({ id: 1 });
       }
     },
+
+    paramsForProducts() {
+      return { params: { id: this.idFood, shop_id: this.idStore } };
+    },
   },
 
   computed: {
@@ -55,15 +59,17 @@ export default {
       startingPath: (state) => state.category.startingPath,
       translitList: (state) => state.category.translitList,
     }),
-    // params() {
-    //   return { params: { id: this.idFood, shop_id: this.idStore } };
-    // },
+  },
+
+  created() {
+    setTimeout(() => {
+      this.getProducts(this.paramsForProducts());
+    }, 2000);
   },
 
   watch: {
     idFood() {
       this.startPath();
-      // this.params;
     },
   },
 };

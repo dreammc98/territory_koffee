@@ -123,7 +123,7 @@ export default {
     }),
   },
   mounted() {
-    this.fetchStores();
+    // this.fetchStores();
   },
 };
 </script>

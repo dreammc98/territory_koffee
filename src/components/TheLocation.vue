@@ -35,7 +35,7 @@ export default {
       storesState: (state) => state.stores.storesState,
     }),
   },
-  mounted() {
+  beforeMount() {
     this.fetchStores();
   },
 };

@@ -15,7 +15,11 @@
         <ul class="flex items-center">
           <li
             class="hidden md:list-item hover:text-white active:scale-x-95"
-            @click="$router.push(startingPath), setPathLink('/'), selectCategory({ id: 1 })"
+            @click="
+              $router.push(startingPath ? startingPath : '/'),
+                setPathLink('/'),
+                selectCategory({ id: 1 })
+            "
           >
             <a href="#">Каталог</a>
           </li>

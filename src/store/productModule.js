@@ -47,7 +47,6 @@ export const productModule = {
         .transform(selectedProduct.product.product_name.trimEnd(), "-")
         .toLowerCase();
     },
-
     switchProdModal(state) {
       state.prodModal ? (state.prodModal = false) : (state.prodModal = true);
       state.prodModal
@@ -58,34 +57,12 @@ export const productModule = {
         state.content = false;
       }
     },
-
-    //
-
     addToCartState(state, payload) {
       state.cart.push(payload);
       LS.setStorage("cartProduct", state.cart);
       state.lineIdCount = payload.line_id;
       LS.setStorage("lineIdCount", state.lineIdCount);
-
-      /* const item_id = payload.item_id;
-			const line_id = state.lineIdCount + 1;
-			const product = state.product;
-			const item = {
-				line_id: line_id,
-				item_id: item_id,
-				product_name: product.product_name,
-				weight: Math.round(product.weight * 1000),
-				weight_unit: 'мл',
-				amount: 1,
-				price: product.price
-			};
-
-			state.cart.push(item);
-			state.lineIdCount = line_id; */
     },
-
-    //
-
     calculateCartTotal(state) {
       let total = 0;
       const cart = state.cart;
@@ -150,7 +127,6 @@ export const productModule = {
     },
 
     addToCart({ commit, state }, params) {
-      console.log(params);
       const product = state.selectedProduct.product;
       const cart = state.cart;
 
@@ -173,7 +149,6 @@ export const productModule = {
               return value.id == optionId;
             });
           });
-
           const option = group.values.find((value) => {
             return value.id == optionId;
           });
@@ -183,13 +158,11 @@ export const productModule = {
             name: option.name,
             amount: 1,
             productGroupId: group.guid,
-            // groupName: group.name
           };
 
           fields.modifiers.push(modifier);
 
           if (option.price > 0) fields.price += parseFloat(option.price);
-          console.log(fields.price, option.price);
         });
       }
 
