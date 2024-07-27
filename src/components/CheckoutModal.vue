@@ -52,9 +52,8 @@
 
             <div>
               <div v-if="isAuthorized">
-                <button disabled @click="changePhoneNumber" class="text-[#ffd09a]">
-                  Изменить номер
-                </button>
+                <!-- @click="changePhoneNumber" -->
+                <button disabled class="text-[#ffd09a]">Изменить номер</button>
                 <div v-if="false" class="border border-[#ffd09a] rounded-xl mt-4 p-2">
                   <p>
                     Обратите внимание: если вы измените номер телефона, то корзина будет очищена и
@@ -79,9 +78,9 @@
                 </div>
               </div>
               <div v-if="!isAuthorized" class="mt-4">
+                <!-- @click="requestConfirmationCode" -->
                 <button
                   color=""
-                  @click="requestConfirmationCode"
                   class="whitespace-nowrap px-1 py-2 shadow-[0_4px_4px_rgba(0,0,0,0.05)] bg-[#edc69a] text-white rounded-full cursor-pointer hover:bg-[#d5b28b]"
                 >
                   Подтвердить номер
@@ -300,8 +299,6 @@ export default {
               }, {});
           }, item.modifiers);
       }, items);
-
-      console.log("232", items);
 
       let timeDelivery = null;
       if (this.dataTime) {
